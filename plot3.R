@@ -2,7 +2,7 @@
 source("getdata.R")
 
 
-plot.3 <- function(data)
+plot.3 <- function(data = NULL)
 {
     if (is.null(data))
     {
