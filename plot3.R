@@ -13,10 +13,14 @@ plot.3 <- function(data = NULL)
 
     png(filename="plot3.png")
 
-    with(data, plot(DateTime, Sub_metering_1, type="l", col="black",
-                    ylab="Energy sub metering", xlab=""))
-    with(data, lines(DateTime, Sub_metering_2, col="red"))
-    with(data, lines(DateTime, Sub_metering_3, col="blue"))
+    with(data,
+    {
+        plot(DateTime, Sub_metering_1, type="l", col="black",
+             ylab="Energy sub metering", xlab="")
+
+        lines(DateTime, Sub_metering_2, col="red")
+        lines(DateTime, Sub_metering_3, col="blue")
+    })
 
     names <- names(data)
     names <- names[grep("Sub_metering", names)]

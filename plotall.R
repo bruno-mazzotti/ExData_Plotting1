@@ -10,8 +10,12 @@ plot.all <- function()
 {
     data <- get.data()
 
+    message("Generating plots...")
+
     plot.1(data)
     plot.2(data)
     plot.3(data)
     plot.4(data)
+
+    message("Done.")
 }

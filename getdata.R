@@ -1,6 +1,10 @@
 
-library(tools)
-library(data.table)
+options(warn=-1)
+
+suppressMessages(library(tools))
+suppressMessages(library(data.table))
+
+options(warn=0)
 
 
 download.raw.data <- function(raw.data.file)
@@ -44,7 +48,8 @@ process.raw.data <- function(raw.data.file, tidy.data.file)
     }
 
     cols <- rep("string", 9)
-    data <- fread(zip.content.file, na.strings="?", sep=";", colClasses=cols)
+    data <- fread(zip.content.file, na.strings="?", sep=";", colClasses=cols,
+                  showProgress=FALSE)
     data <- data[data$Date == "1/2/2007" | data$Date == "2/2/2007",]
 
     DateTime <- strptime(paste(data$Date, data$Time), "%d/%m/%Y %H:%M:%S")

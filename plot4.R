@@ -30,6 +30,7 @@ plot.4 <- function(data = NULL)
 
         plot(DateTime, Sub_metering_1, type="l", col="black",
              ylab="Energy sub metering", xlab="")
+
         lines(DateTime, Sub_metering_2, col="red")
         lines(DateTime, Sub_metering_3, col="blue")
 
