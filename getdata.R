@@ -1,4 +1,18 @@
 
+################################################################################
+##
+## File: getdata.R
+## Author: Bruno Franciscon Mazzotti <bruno.mazzotti@gmail.com>
+##
+## Course Project 1 - "Exploratory Data Analysis" course of J. H. University
+## "Data Science Specialization" on Coursera.
+##
+## This file contains source code to read and process the data used in the
+## course project.
+##
+################################################################################
+
+
 options(warn=-1)
 
 suppressMessages(library(tools))
@@ -7,8 +21,11 @@ suppressMessages(library(data.table))
 options(warn=0)
 
 
+# Download zip file from course website and check its integrity.
 download.raw.data <- function(raw.data.file)
 {
+    # Download file.
+
     base.url <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2F"
     file.url <- paste(base.url, "household_power_consumption.zip", sep="")
 
@@ -22,6 +39,8 @@ download.raw.data <- function(raw.data.file)
         stop("Could not download raw data file.")
     }
 
+    # Compute MD5 hash of file content to check data integrity.
+
     data.md5 <- md5sum(raw.data.file)
     data.md5 <- data.md5[[raw.data.file]]
 
@@ -34,8 +53,11 @@ download.raw.data <- function(raw.data.file)
 }
 
 
+# Turn downloaded data into a tidy subset used in the project's plots.
 process.raw.data <- function(raw.data.file, tidy.data.file)
 {
+    # Extract zip file.
+
     zip.content.file <- "household_power_consumption.txt"
 
     message("Processing raw data...")
@@ -47,15 +69,25 @@ process.raw.data <- function(raw.data.file, tidy.data.file)
         stop("Could not extract compressed raw data file.")
     }
 
+    # Read entire file as string data.
+
     cols <- rep("string", 9)
     data <- fread(zip.content.file, na.strings="?", sep=";", colClasses=cols,
                   showProgress=FALSE)
+
+    # Subset data with only the dates of interest.
+
     data <- data[data$Date == "1/2/2007" | data$Date == "2/2/2007",]
+
+    # Merge Date and Time columns into a single POSIXct column. Old columns are
+    # droped.
 
     DateTime <- strptime(paste(data$Date, data$Time), "%d/%m/%Y %H:%M:%S")
     DateTime <- as.POSIXct(DateTime)
     data <- subset(data, select=-c(1, 2))
     data <- cbind(DateTime, data)
+
+    # Convert numeric columns from string to numeric data type.
 
     data[, Global_active_power := as.numeric(Global_active_power)]
     data[, Global_reactive_power := as.numeric(Global_reactive_power)]
@@ -65,7 +97,11 @@ process.raw.data <- function(raw.data.file, tidy.data.file)
     data[, Sub_metering_2 := as.numeric(Sub_metering_2)]
     data[, Sub_metering_3 := as.numeric(Sub_metering_3)]
 
+    # Remove extracted file to save disk space.
+
     file.remove(zip.content.file)
+
+    # Save tidy data file.
 
     message("Saving tidy data...")
 
@@ -77,6 +113,7 @@ process.raw.data <- function(raw.data.file, tidy.data.file)
 }
 
 
+# Read tidy data file.
 read.tidy.data <- function(tidy.data.file)
 {
     data        <- read.csv("tidydata.txt", sep=";", quote="")
@@ -92,6 +129,8 @@ read.tidy.data <- function(tidy.data.file)
 }
 
 
+# Main file function. Do all the job to get and process data by calling other
+# functions.
 get.data <- function ()
 {
     data <- NULL

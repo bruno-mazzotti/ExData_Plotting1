@@ -1,4 +1,18 @@
 
+################################################################################
+##
+## File: plot4.R
+## Author: Bruno Franciscon Mazzotti <bruno.mazzotti@gmail.com>
+##
+## Course Project 1 - "Exploratory Data Analysis" course of J. H. University
+## "Data Science Specialization" on Coursera.
+##
+## This file contains the "main function" source code of the course project. It
+## loads the data and make all the plots with a single function.
+##
+################################################################################
+
+
 source("getdata.R")
 source("plot1.R")
 source("plot2.R")
